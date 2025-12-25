@@ -19,7 +19,8 @@ import {
   UserCheck,
   Award,
   AlertCircle,
-  LayoutGrid
+  LayoutGrid,
+  Search
 } from 'lucide-react';
 import { 
   CraneType, 
@@ -321,6 +322,7 @@ const App: React.FC = () => {
                   {items.filter(item => item.category === group.title).map(item => {
                     const shiftKey = selectedShift === 'day' ? 'dayShift' : 'nightShift';
                     const currentStatus = item.checks[activeDay][shiftKey].status;
+                    const itemIllustration = group.itemIllustrations?.[item.label];
 
                     return (
                       <div key={item.id} className={`p-5 rounded-2xl border transition-all hover:shadow-lg ${
@@ -329,15 +331,32 @@ const App: React.FC = () => {
                           : 'bg-slate-800/50 border-slate-700 hover:border-indigo-700'
                       }`}>
                         <div className="flex flex-col lg:flex-row gap-6">
-                          <div className="flex-1">
-                            <span className={`text-sm font-black uppercase tracking-tight block mb-2 ${selectedShift === 'day' ? 'text-slate-800' : 'text-slate-100'}`}>
-                              {item.label}
-                            </span>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verification Point</p>
+                          <div className="flex-1 flex gap-4">
+                            {/* Respective Item Image Thumbnail */}
+                            {itemIllustration && (
+                              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-slate-100 rounded-xl overflow-hidden border border-slate-200 flex-shrink-0 group relative">
+                                <img 
+                                  src={itemIllustration} 
+                                  alt={item.label} 
+                                  className="w-full h-full object-cover transition-transform group-hover:scale-110"
+                                  loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                  <Search className="text-white w-4 h-4" />
+                                </div>
+                              </div>
+                            )}
+                            
+                            <div className="flex-1">
+                              <span className={`text-sm font-black uppercase tracking-tight block mb-1 ${selectedShift === 'day' ? 'text-slate-800' : 'text-slate-100'}`}>
+                                {item.label}
+                              </span>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verification Point</p>
+                            </div>
                           </div>
 
                           <div className="flex flex-col sm:flex-row gap-4 flex-[1.5]">
-                            {/* status buttons */}
+                            {/* Status Buttons */}
                             <div className="flex-1 flex gap-2">
                               {[InspectionStatus.PASS, InspectionStatus.FAIL, InspectionStatus.NA].map(status => (
                                 <button
@@ -358,7 +377,7 @@ const App: React.FC = () => {
                               ))}
                             </div>
 
-                            {/* Conditional Photo */}
+                            {/* Conditional Photo for Failures */}
                             {currentStatus === InspectionStatus.FAIL && (
                               <div className="flex-1 animate-in slide-in-from-right-4 fade-in duration-300">
                                 <PhotoCapture
@@ -488,7 +507,7 @@ const App: React.FC = () => {
         </section>
 
         <footer className="mt-16 text-center">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 opacity-50">Industrial Safety Protocol V2.7</p>
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 opacity-50">Industrial Safety Protocol V2.7.1</p>
           <div className="w-20 h-0.5 bg-slate-300 dark:bg-slate-700 mx-auto rounded-full mb-8"></div>
         </footer>
       </div>
