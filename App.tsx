@@ -97,7 +97,6 @@ const App: React.FC = () => {
     inspectedBy: '',
     timestamp: new Date().toLocaleString()
   });
-  const [remarks, setRemarks] = useState('');
 
   // Progress tracking
   const progress = useMemo(() => {
@@ -184,7 +183,6 @@ const App: React.FC = () => {
             </div>
           </div>
           
-          {/* Progress Bar */}
           <div className="absolute bottom-0 left-0 h-1 bg-amber-500/20 w-full overflow-hidden">
             <div 
               className={`h-full transition-all duration-1000 ease-out ${progress.percent === 100 ? 'bg-emerald-400' : 'bg-amber-500'}`}
@@ -193,7 +191,7 @@ const App: React.FC = () => {
           </div>
         </header>
 
-        {/* Global Shift Selector (Hero Style) */}
+        {/* Global Shift Selector */}
         <div className="mb-8 p-1 bg-slate-200/50 dark:bg-slate-800/50 rounded-2xl flex relative no-print shadow-inner border border-slate-200/50">
           <div 
             className={`absolute top-1 bottom-1 w-1/2 rounded-xl transition-all duration-500 ease-spring ${
@@ -222,7 +220,7 @@ const App: React.FC = () => {
           </button>
         </div>
 
-        {/* Metadata Section - Compact Card */}
+        {/* Metadata Section - Precisely Aligned with Requested Labels */}
         <section className={`rounded-3xl shadow-sm border p-6 mb-8 transition-colors duration-500 ${selectedShift === 'day' ? 'bg-white border-slate-200' : 'bg-slate-900/50 border-slate-800'}`}>
           <div className="flex items-center gap-3 mb-8 border-b border-slate-100 dark:border-slate-800 pb-5">
             <div className={`p-2 rounded-xl ${selectedShift === 'day' ? 'bg-amber-100 text-amber-600' : 'bg-indigo-900/50 text-indigo-400'}`}>
@@ -232,10 +230,10 @@ const App: React.FC = () => {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-10">
-            {/* Visual Preview Column - Prominent and Large */}
+            {/* Visual Preview */}
             <div className={`order-first lg:order-last flex flex-col items-center justify-center p-4 rounded-3xl border-2 transition-all duration-500 ${
               metadata.craneType 
-                ? (selectedShift === 'day' ? 'bg-amber-50 border-amber-200 shadow-lg' : 'bg-indigo-900/20 border-indigo-800 shadow-indigo-900/20 shadow-lg') 
+                ? (selectedShift === 'day' ? 'bg-amber-50 border-amber-200 shadow-lg' : 'bg-indigo-900/20 border-indigo-800 shadow-lg') 
                 : (selectedShift === 'day' ? 'bg-slate-50 border-slate-100 border-dashed' : 'bg-slate-800/30 border-slate-700 border-dashed')
             }`}>
               {metadata.craneType ? (
@@ -272,23 +270,32 @@ const App: React.FC = () => {
 
             <div className="space-y-5">
               <div className="group">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5 transition-colors group-focus-within:text-amber-500">Make / Model</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5 transition-colors group-focus-within:text-amber-500">Make:</label>
                 <input 
                   type="text" 
                   className={`w-full rounded-xl p-4 border-2 transition-all outline-none font-bold text-sm ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100 focus:border-amber-400 shadow-sm' : 'bg-slate-800 border-slate-700 text-white focus:border-indigo-500'}`}
-                  placeholder="e.g. LIEBHERR LTM 1100"
+                  placeholder="e.g. LIEBHERR"
                   value={metadata.make}
                   onChange={e => setMetadata({...metadata, make: e.target.value})}
                 />
               </div>
               <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Plate / Plant No.</label>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Plate / Plant No:</label>
                 <input 
                   type="text" 
                   className={`w-full rounded-xl p-4 border-2 transition-all outline-none font-mono text-sm uppercase ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100 focus:border-amber-400 shadow-sm' : 'bg-slate-800 border-slate-700 text-white focus:border-indigo-500'}`}
-                  placeholder="CR-0123"
+                  placeholder="e.g. CR-101"
                   value={metadata.plateNo}
                   onChange={e => setMetadata({...metadata, plateNo: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Date: From</label>
+                <input 
+                  type="date" 
+                  className={`w-full rounded-xl p-4 border-2 transition-all outline-none font-bold text-sm ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100 focus:border-amber-400 shadow-sm' : 'bg-slate-800 border-slate-700 text-white focus:border-indigo-500'}`}
+                  value={metadata.dateFrom}
+                  onChange={e => setMetadata({...metadata, dateFrom: e.target.value})}
                 />
               </div>
             </div>
@@ -357,7 +364,8 @@ const App: React.FC = () => {
                   {items.filter(item => item.category === group.title).map(item => {
                     const shiftKey = selectedShift === 'day' ? 'dayShift' : 'nightShift';
                     const currentStatus = item.checks[activeDay][shiftKey].status;
-                    const itemIllustration = group.itemIllustrations?.[item.label];
+                    const illustrations = group.itemIllustrations?.[item.label];
+                    const illustrationList = Array.isArray(illustrations) ? illustrations : (illustrations ? [illustrations] : []);
 
                     return (
                       <div key={item.id} className={`p-5 rounded-2xl border transition-all hover:shadow-lg ${
@@ -366,24 +374,28 @@ const App: React.FC = () => {
                           : 'bg-slate-800/50 border-slate-700 hover:border-indigo-700'
                       }`}>
                         <div className="flex flex-col lg:flex-row gap-6">
-                          <div className="flex-1 flex gap-4">
-                            {/* Respective Item Image Thumbnail */}
-                            {itemIllustration && (
-                              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-slate-100 rounded-xl overflow-hidden border border-slate-200 flex-shrink-0 group relative">
-                                <img 
-                                  src={itemIllustration} 
-                                  alt={item.label} 
-                                  className="w-full h-full object-cover transition-transform group-hover:scale-110"
-                                  loading="lazy"
-                                />
-                                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                  <Search className="text-white w-4 h-4" />
-                                </div>
+                          <div className="flex-1 flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
+                            {/* Respective Item Image Thumbnail(s) */}
+                            {illustrationList.length > 0 ? (
+                              <div className="flex gap-2">
+                                {illustrationList.map((src, idx) => (
+                                  <div key={idx} className="w-16 h-16 sm:w-20 sm:h-20 bg-slate-100 rounded-xl overflow-hidden border border-slate-200 flex-shrink-0 group relative shadow-sm">
+                                    <img 
+                                      src={src} 
+                                      alt={`${item.label} reference ${idx + 1}`} 
+                                      className="w-full h-full object-cover transition-transform group-hover:scale-110"
+                                      loading="lazy"
+                                    />
+                                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                      <Search className="text-white w-4 h-4" />
+                                    </div>
+                                  </div>
+                                ))}
                               </div>
-                            )}
+                            ) : null}
                             
-                            <div className="flex-1">
-                              <span className={`text-sm font-black uppercase tracking-tight block mb-1 ${selectedShift === 'day' ? 'text-slate-800' : 'text-slate-100'}`}>
+                            <div className="flex-1 min-w-0">
+                              <span className={`text-sm font-black uppercase tracking-tight block mb-1 truncate ${selectedShift === 'day' ? 'text-slate-800' : 'text-slate-100'}`}>
                                 {item.label}
                               </span>
                               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Verification Point</p>
@@ -391,7 +403,6 @@ const App: React.FC = () => {
                           </div>
 
                           <div className="flex flex-col sm:flex-row gap-4 flex-[1.5]">
-                            {/* Status Buttons */}
                             <div className="flex-1 flex gap-2">
                               {[InspectionStatus.PASS, InspectionStatus.FAIL, InspectionStatus.NA].map(status => (
                                 <button
@@ -412,7 +423,6 @@ const App: React.FC = () => {
                               ))}
                             </div>
 
-                            {/* Conditional Photo for Failures */}
                             {currentStatus === InspectionStatus.FAIL && (
                               <div className="flex-1 animate-in slide-in-from-right-4 fade-in duration-300">
                                 <PhotoCapture
@@ -542,7 +552,7 @@ const App: React.FC = () => {
         </section>
 
         <footer className="mt-16 text-center">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 opacity-50">Industrial Safety Protocol V2.8.0</p>
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 opacity-50">Industrial Safety Protocol V2.8.2</p>
           <div className="w-20 h-0.5 bg-slate-300 dark:bg-slate-700 mx-auto rounded-full mb-8"></div>
         </footer>
       </div>
@@ -569,11 +579,18 @@ const App: React.FC = () => {
           input, select, textarea { border: 1px solid #ccc !important; background: white !important; color: black !important; }
         }
 
-        /* Ergonomic tap targets */
         button, select, input { min-height: 48px; }
         
         .ease-spring {
           transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
     </div>

@@ -20,7 +20,7 @@ export interface ChecklistGroup {
   illustrationText?: string;
   illustrationType?: 'document' | 'mechanical' | 'safety' | 'hydraulic';
   illustrationUrl?: string;
-  itemIllustrations?: Record<string, string>;
+  itemIllustrations?: Record<string, string | string[]>;
 }
 
 export const CHECKLIST_GROUPS: ChecklistGroup[] = [
@@ -35,9 +35,6 @@ export const CHECKLIST_GROUPS: ChecklistGroup[] = [
       'Load Indicator Light', 
       'Anemometer Device'
     ],
-    illustrationText: 'LEGAL DOCUMENT / COMPLIANCE SEAL',
-    illustrationType: 'document',
-    // Removed illustrationUrl from here to relocate it to the specific item
     itemIllustrations: {
       'Documents': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1q6pW_nvDYtrnvHzl4JTaGL7L26IbAibkcw&s',
       'Load Chart': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCV99rV7SltqBzGrcQgXFEznNQX9lyp3gcyw&s',
@@ -58,10 +55,8 @@ export const CHECKLIST_GROUPS: ChecklistGroup[] = [
       'Fuel Tank', 
       'Battery Condition'
     ],
-    illustrationType: 'mechanical',
-    illustrationUrl: 'https://www.evengineeringonline.com/wp-content/uploads/2025/06/MUST-Danfoss-SANY-eHydraulics-system-1.jpg',
     itemIllustrations: {
-      'Engine Condition': 'https://www.evengineeringonline.com/wp-content/uploads/2025/06/MUST-Danfoss-SANY-eHydraulics-system-1.jpg',
+      'Engine Condition': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSv9lO_wE5H9w3H8H4H4H4H4H4H4H4H4H4H4&s',
       'Hydraulic System': 'https://www.evengineeringonline.com/wp-content/uploads/2025/06/MUST-Danfoss-SANY-eHydraulics-system-1.jpg',
       'Oil Leak': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvO05cDWvho1iRa0XtN5B6vthKFwz2DmuVpQ&s',
       'Hydraulic Hoses / Cylinder Condition': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVh6Y4BRi1vK-8pYghRS-zuejFHtrSZWZs5g&s',
@@ -87,8 +82,14 @@ export const CHECKLIST_GROUPS: ChecklistGroup[] = [
       'Gauges': 'https://i.pinimg.com/736x/4c/71/22/4c71228012991582b96d6179f9f406b1.jpg',
       'Seat Belt': 'https://i.pinimg.com/736x/5f/a1/fe/5fa1fe56adfd6623393034e3e3587951.jpg',
       'Horn system': 'https://i.pinimg.com/1200x/69/5e/60/695e608983cded6e57e00f346d897767.jpg',
-      'Beacon / Reverse Alarm': 'https://i.pinimg.com/1200x/44/06/c5/4406c54a504622f4b51a86cdae6d0c98.jpg',
-      'Head & Rear light': 'https://i.pinimg.com/1200x/86/a1/56/86a1562533e96ee94bff44a0afa84d04.jpg'
+      'Beacon / Reverse Alarm': [
+        'https://i.pinimg.com/1200x/44/06/c5/4406c54a504622f4b51a86cdae6d0c98.jpg',
+        'https://m.media-amazon.com/images/I/61NeDw4RO6L.jpg'
+      ],
+      'Head & Rear light': [
+        'https://i.pinimg.com/1200x/86/a1/56/86a1562533e96ee94bff44a0afa84d04.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1BNOEcnPHHFX94qTHGYTQ0C0EfUPlo5ssMA&s'
+      ]
     }
   },
   {
@@ -145,7 +146,6 @@ export const CHECKLIST_GROUPS: ChecklistGroup[] = [
       'Side Mirrors', 
       'Fire Extinguisher'
     ],
-    illustrationType: 'safety',
     itemIllustrations: {
       'Boom Angle Indicator': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2WI5Y85MOLPX20ohcUYRIzcvFKq5a0utOxQ&s',
       'Telescopic Boom': 'https://www.sanyamerica.com/wp-content/uploads/2025/02/crane-600x600.jpg',
