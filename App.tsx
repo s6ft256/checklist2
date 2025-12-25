@@ -153,8 +153,8 @@ const App: React.FC = () => {
     <div className={`min-h-screen transition-colors duration-500 ${selectedShift === 'day' ? 'bg-slate-50' : 'bg-[#0f141d]'}`}>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         
-        {/* Compact Sticky Header */}
-        <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md text-white p-3 sm:p-4 -mx-4 sm:-mx-6 lg:-mx-8 shadow-2xl mb-8 border-b border-white/10">
+        {/* Scrollable Header (Previously Sticky) */}
+        <header className="relative bg-slate-900 text-white p-3 sm:p-4 -mx-4 sm:-mx-6 lg:-mx-8 shadow-2xl mb-8 border-b border-white/10">
           <div className="flex justify-between items-center gap-4">
             <div className="flex items-center gap-3 sm:gap-5">
               <div className="w-16 h-12 sm:w-28 sm:h-20 bg-white rounded-xl overflow-hidden border-2 border-slate-700 flex-shrink-0 transition-all duration-500 hover:scale-110 shadow-lg ring-2 ring-white/10">
@@ -220,7 +220,7 @@ const App: React.FC = () => {
           </button>
         </div>
 
-        {/* Metadata Section - Precisely Aligned with Requested Labels */}
+        {/* Metadata Section (Scrollable Card) */}
         <section className={`rounded-3xl shadow-sm border p-6 mb-8 transition-colors duration-500 ${selectedShift === 'day' ? 'bg-white border-slate-200' : 'bg-slate-900/50 border-slate-800'}`}>
           <div className="flex items-center gap-3 mb-8 border-b border-slate-100 dark:border-slate-800 pb-5">
             <div className={`p-2 rounded-xl ${selectedShift === 'day' ? 'bg-amber-100 text-amber-600' : 'bg-indigo-900/50 text-indigo-400'}`}>
@@ -552,7 +552,7 @@ const App: React.FC = () => {
         </section>
 
         <footer className="mt-16 text-center">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 opacity-50">Industrial Safety Protocol V2.8.2</p>
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 opacity-50">Industrial Safety Protocol V2.8.3</p>
           <div className="w-20 h-0.5 bg-slate-300 dark:bg-slate-700 mx-auto rounded-full mb-8"></div>
         </footer>
       </div>
