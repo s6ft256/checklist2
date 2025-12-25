@@ -1,0 +1,7 @@
+{
+  "name": "Checklist",
+  "description": "A professional HSE-compliant digital checklist for mobile crane operators, featuring daily/nightly inspections, maintenance tracking, and digital signatures.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
