@@ -20,7 +20,8 @@ import {
   Award,
   AlertCircle,
   LayoutGrid,
-  Search
+  Search,
+  Maximize2
 } from 'lucide-react';
 import { 
   CraneType, 
@@ -156,15 +157,15 @@ const App: React.FC = () => {
         {/* Compact Sticky Header */}
         <header className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md text-white p-3 sm:p-4 -mx-4 sm:-mx-6 lg:-mx-8 shadow-2xl mb-8 border-b border-white/10">
           <div className="flex justify-between items-center gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-10 sm:w-16 sm:h-12 bg-white rounded-lg overflow-hidden border border-slate-700 flex-shrink-0 transition-transform hover:scale-105">
-                <img src={craneImage} alt="Crane" className="w-full h-full object-cover" />
+            <div className="flex items-center gap-3 sm:gap-5">
+              <div className="w-16 h-12 sm:w-28 sm:h-20 bg-white rounded-xl overflow-hidden border-2 border-slate-700 flex-shrink-0 transition-all duration-500 hover:scale-110 shadow-lg ring-2 ring-white/10">
+                <img src={craneImage} alt="Crane" className="w-full h-full object-cover transition-opacity duration-700" key={craneImage} />
               </div>
               <div className="min-w-0">
-                <h1 className="text-sm sm:text-lg font-black tracking-tighter uppercase truncate leading-none">Mobile Crane HSE</h1>
-                <div className="flex items-center gap-1.5 mt-1">
+                <h1 className="text-sm sm:text-xl font-black tracking-tighter uppercase truncate leading-none">Mobile Crane HSE</h1>
+                <div className="flex items-center gap-1.5 mt-2">
                   <span className={`w-2 h-2 rounded-full animate-pulse ${progress.percent === 100 ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
-                  <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">{progress.percent}% Completed</span>
+                  <span className="text-[10px] sm:text-xs font-black text-white/60 uppercase tracking-widest">{progress.percent}% Completed</span>
                 </div>
               </div>
             </div>
@@ -177,7 +178,7 @@ const App: React.FC = () => {
               >
                 <Printer className="w-5 h-5 text-white/80" />
               </button>
-              <div className="bg-amber-500 text-slate-900 px-3 py-1.5 rounded-xl font-black text-[10px] sm:text-xs uppercase shadow-lg shadow-amber-500/20">
+              <div className="bg-amber-500 text-slate-900 px-3 py-2 rounded-xl font-black text-[10px] sm:text-sm uppercase shadow-lg shadow-amber-500/20">
                 {activeDay}
               </div>
             </div>
@@ -230,13 +231,51 @@ const App: React.FC = () => {
             <h2 className={`text-sm font-black uppercase tracking-widest ${selectedShift === 'day' ? 'text-slate-800' : 'text-slate-100'}`}>Crane Configuration</h2>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-8">
-            <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-6 gap-x-10">
+            {/* Visual Preview Column - Prominent and Large */}
+            <div className={`order-first lg:order-last flex flex-col items-center justify-center p-4 rounded-3xl border-2 transition-all duration-500 ${
+              metadata.craneType 
+                ? (selectedShift === 'day' ? 'bg-amber-50 border-amber-200 shadow-lg' : 'bg-indigo-900/20 border-indigo-800 shadow-indigo-900/20 shadow-lg') 
+                : (selectedShift === 'day' ? 'bg-slate-50 border-slate-100 border-dashed' : 'bg-slate-800/30 border-slate-700 border-dashed')
+            }`}>
+              {metadata.craneType ? (
+                <div className="w-full space-y-4 animate-in fade-in zoom-in-95 duration-500">
+                  <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl relative group border-4 border-white dark:border-slate-800">
+                    <img 
+                      src={craneImage} 
+                      alt={metadata.craneType} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <button className="absolute bottom-3 right-3 p-2 bg-white/90 rounded-lg text-slate-800 opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
+                      <Maximize2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div className="text-center px-4">
+                    <p className={`text-[10px] font-black uppercase tracking-[0.3em] mb-1 ${selectedShift === 'day' ? 'text-amber-600' : 'text-indigo-400'}`}>
+                      Selected Category
+                    </p>
+                    <h4 className={`text-xs font-black uppercase tracking-tighter ${selectedShift === 'day' ? 'text-slate-800' : 'text-slate-100'}`}>
+                      {metadata.craneType}
+                    </h4>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-10 opacity-30 select-none">
+                  <LayoutGrid className={`w-12 h-12 mx-auto mb-3 ${selectedShift === 'day' ? 'text-slate-300' : 'text-slate-600'}`} />
+                  <p className="text-[10px] font-black uppercase tracking-widest leading-relaxed">
+                    Select Crane<br/>Type to Preview
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-5">
               <div className="group">
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5 transition-colors group-focus-within:text-amber-500">Make / Model</label>
                 <input 
                   type="text" 
-                  className={`w-full rounded-xl p-3.5 border-2 transition-all outline-none font-bold text-sm ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100 focus:border-amber-400' : 'bg-slate-800 border-slate-700 text-white focus:border-indigo-500'}`}
+                  className={`w-full rounded-xl p-4 border-2 transition-all outline-none font-bold text-sm ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100 focus:border-amber-400 shadow-sm' : 'bg-slate-800 border-slate-700 text-white focus:border-indigo-500'}`}
                   placeholder="e.g. LIEBHERR LTM 1100"
                   value={metadata.make}
                   onChange={e => setMetadata({...metadata, make: e.target.value})}
@@ -246,7 +285,7 @@ const App: React.FC = () => {
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Plate / Plant No.</label>
                 <input 
                   type="text" 
-                  className={`w-full rounded-xl p-3.5 border-2 transition-all outline-none font-mono text-sm uppercase ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100 focus:border-amber-400' : 'bg-slate-800 border-slate-700 text-white focus:border-indigo-500'}`}
+                  className={`w-full rounded-xl p-4 border-2 transition-all outline-none font-mono text-sm uppercase ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100 focus:border-amber-400 shadow-sm' : 'bg-slate-800 border-slate-700 text-white focus:border-indigo-500'}`}
                   placeholder="CR-0123"
                   value={metadata.plateNo}
                   onChange={e => setMetadata({...metadata, plateNo: e.target.value})}
@@ -254,35 +293,31 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-5">
               <div>
                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Crane Category</label>
-                <select 
-                  className={`w-full rounded-xl p-3.5 border-2 transition-all outline-none font-black text-xs uppercase appearance-none cursor-pointer ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100 text-slate-800 focus:border-amber-400' : 'bg-slate-800 border-slate-700 text-white focus:border-indigo-500'}`}
-                  value={metadata.craneType}
-                  onChange={e => setMetadata({...metadata, craneType: e.target.value as CraneType})}
-                >
-                  <option value="">Select Category...</option>
-                  {Object.values(CraneType).map(type => <option key={type} value={type}>{type}</option>)}
-                </select>
+                <div className="relative">
+                  <select 
+                    className={`w-full rounded-xl p-4 border-2 transition-all outline-none font-black text-xs uppercase appearance-none cursor-pointer pr-10 ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100 text-slate-800 focus:border-amber-400 shadow-sm' : 'bg-slate-800 border-slate-700 text-white focus:border-indigo-500'}`}
+                    value={metadata.craneType}
+                    onChange={e => setMetadata({...metadata, craneType: e.target.value as CraneType})}
+                  >
+                    <option value="">Select Category...</option>
+                    {Object.values(CraneType).map(type => <option key={type} value={type}>{type}</option>)}
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Reg. Expiry</label>
-                  <input type="date" className={`w-full rounded-xl p-3 border-2 transition-all outline-none text-xs font-bold ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100' : 'bg-slate-800 border-slate-700 text-white'}`} value={metadata.registrationExpiry} onChange={e => setMetadata({...metadata, registrationExpiry: e.target.value})} />
+                  <input type="date" className={`w-full rounded-xl p-3.5 border-2 transition-all outline-none text-xs font-bold ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100' : 'bg-slate-800 border-slate-700 text-white'}`} value={metadata.registrationExpiry} onChange={e => setMetadata({...metadata, registrationExpiry: e.target.value})} />
                 </div>
                 <div>
                   <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1.5">Cert. Expiry</label>
-                  <input type="date" className={`w-full rounded-xl p-3 border-2 transition-all outline-none text-xs font-bold ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100' : 'bg-slate-800 border-slate-700 text-white'}`} value={metadata.thirdPartyExpiry} onChange={e => setMetadata({...metadata, thirdPartyExpiry: e.target.value})} />
+                  <input type="date" className={`w-full rounded-xl p-3.5 border-2 transition-all outline-none text-xs font-bold ${selectedShift === 'day' ? 'bg-slate-50 border-slate-100' : 'bg-slate-800 border-slate-700 text-white'}`} value={metadata.thirdPartyExpiry} onChange={e => setMetadata({...metadata, thirdPartyExpiry: e.target.value})} />
                 </div>
               </div>
-            </div>
-            
-            <div className="hidden lg:flex items-center justify-center p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-dashed border-slate-200 dark:border-slate-700">
-               <div className="text-center">
-                 <LayoutGrid className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Operational<br/>Asset ID</p>
-               </div>
             </div>
           </div>
         </section>
@@ -507,7 +542,7 @@ const App: React.FC = () => {
         </section>
 
         <footer className="mt-16 text-center">
-          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 opacity-50">Industrial Safety Protocol V2.7.1</p>
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 opacity-50">Industrial Safety Protocol V2.8.0</p>
           <div className="w-20 h-0.5 bg-slate-300 dark:bg-slate-700 mx-auto rounded-full mb-8"></div>
         </footer>
       </div>
